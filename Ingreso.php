@@ -6,10 +6,10 @@
 
 		if ($_SESSION["superadmin"] != "S") {
 			include "view/header.html";
-			include "view/Ingreso.html";
+			include "view/Ingreso.php";
 		} else {
 			include "view/headeradmin.html";
-			include "view/Ingreso.html";
+			include "view/Ingreso.php";
 		}
 
 		include "view/footer.html";

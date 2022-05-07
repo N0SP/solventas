@@ -1,4 +1,7 @@
-
+<?php 
+include_once('./model/Conexion.php');
+//include_once('modal-ingreso.php');
+?>
 <div class="panel panel-default">
   <div class="panel-heading">
     <div class="box-header with-border">
@@ -37,9 +40,15 @@
                     <label for="inputMarca">Sucursal:</label>
                     <div class="form-group has-success">
                       <div class="input-group">
-                        <input id="txtSucursal" type="text" value="<?php echo $_SESSION["sucursal"] ?>"
-                        class="form-control" name="txtSucursal" required=""
-                        placeholder="Seleccione una Sucursal" autofocus=""
+                        <input 
+                        id="txtSucursal" 
+                        type="text" 
+                        value="<?php echo $_SESSION["sucursal"] ?>"
+                        class="form-control"
+                        
+                         name="txtSucursal"
+                          placeholder="Seleccione una Sucursal"
+                           autofocus=""
                         disabled/>
                         <span class="input-group-btn">
                           <button
@@ -160,34 +169,27 @@
                 <div class="row" id="btnAgregar">
                   <div class="col-lg-6 left">
                     <div class="form-group">
-                      <button
-                        type="button"
-                        id="btnAgregarMas"
-                        class="btn btn-info"
-                        onClick="AgregarMas();"
-                      >
-                        <i class="fa fa-search"></i> Grabar Bienes
-                      </button>
+                      <button type="button" id="add" class="btn btn-info"><i class="fa fa-search"></i> Grabar Bienes</button>
                     </div>
                   </div>
                 </div>
-                <div></div>
+                <div><?php include_once('InputDinamico.php');?></div>
+
+                <div class="col-lg-12 left">
+                <h5></h5>
+                <button class="btn btn-success" type="submit" id="btnRegistrarIng" value="insert">
+                  <i class="fa fa-floppy-o"></i> Registrar
+                </button>
+                <a href="Ingreso.php" class="btn btn-primary"
+                  ><i class="fa fa-remove"></i> Cancelar</a
+                >
+                <hr />
+                <span class="lead text-primary"></span>
               </div>
-
-
-              
-                <div id="productos">
-                <?php require_once("InputDinamico.php") ?>
-                </div>
-
-         <!--     <div class="col-sm-9 col-lg-12 main">
+              </div>
+                <div id="cargaexterna"><?php /*require_once('InputDinamico.php')?*/?></div>
                 
-                      <div id="productos">
-                        <?php require_once("view/InputDinamico.php") ?>
-                      </div>      -->    
-              <div
-                class="col-sm-9 col-sm-offset-3 col-lg-8 col-lg-offset-2 main"
-              >
+              <div class="col-sm-9 col-sm-offset-3 col-lg-8 col-lg-offset-2 main">
                 <div class="row">
                   <div class="col-lg-4 left">
                     <div class="input-group has-error">
@@ -212,34 +214,12 @@
                   <div class="col-lg-4 left has-error">
                     <div class="input-group">
                       <div id="Total" class="input-group-addon"></div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="txtTotal"
-                        name="txtTotal"
-                        placeholder="Total"
-                        disabled
-                      />
+                      <input type="text" class="form-control" id="txtTotal" name="txtTotal" placeholder="Total" disabled/>
                     </div>
                   </div>
                 </div>
               </div>
               <br />
-              <div class="col-lg-12 left">
-                <h5></h5>
-                <button
-                  class="btn btn-success"
-                  type="submit"
-                  id="btnRegistrarIng"
-                >
-                  <i class="fa fa-floppy-o"></i> Registrar
-                </button>
-                <a href="Ingreso.php" class="btn btn-primary"
-                  ><i class="fa fa-remove"></i> Cancelar</a
-                >
-                <hr />
-                <span class="lead text-primary"></span>
-              </div>
 
               <br /><br />
             </div>
@@ -504,22 +484,166 @@
     </div>
   </div>
 </form>
+<script>
+$("#liCompras").addClass("treeview active");
+$("#liIng").addClass("active");
+  $(document).ready(function()
+{
+/*$("#add").on('click', function(){
+   $('#classModal').modal('show');
+    }); */
 
-<script type="text/javascript">
-  $("#liCompras").addClass("treeview active");
-  $("#liIng").addClass("active");
-
-  $(document).ready(function() {
-    $('#tblPrueba').DataTable( {
-        "scrollX": true
-    } );
-} );
-
-function AgregarMas() {
-	$("<div>").load("view/InputDinamico.php", function() {
-   		$("#productos").append($(this).html());
-	});	
+$(document).on('click', '#add', function(){
+  var html = '';
   
-}
+  html += '<tr>';
+  html += '<td><select name="cboMedio[]" class="form-control cboMedio[]"><option value="0">Seleccione Medio</option><?php echo medios_de_transporte($connect); ?></select></td>';
+  html += '<td><input type="text" name="serie[]" class="form-control serie[]"></td>';
+  html += '<td><input type="text" name="descripcion[]" class="form-control descripcion[]"></td>';
+  html += '<td><select name="cboMarcaIng[]" class="form-control cboMarcaIng[]"><option value="0">Seleccione Marca</option><?php echo marcas_aeronaval($connect); ?></select></td>';
+  html += '<td><select name="cboModelo[]" class="form-control cboModelo[]"><option value="0">Seleccione Modelo</option><?php echo modelos_aeronaval($connect) ?></select></td>';  
+  html += '<td><input type="text" name="Tipo_Bien[]" class="form-control Tipo_Bien[]"></td>';
+  html += '<td><input type="text" name="Color[]" class="form-control Color[]"></td>';
+  html += '<td><input type="text" name="Año[]" class="form-control Año[]"></td>';
+  html += '<td><input type="text" name="Placa[]" class="form-control Placa[]"></td>';
+  html += '<td><input type="text" name="stock_ingreso[]" class="form-control stock_ingreso[]"></td>';
+  html += '<td><input type="text" name="precio_compra[]" class="form-control precio_compra[]"></td>';
+  html += '<td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="glyphicon glyphicon-minus"></span></button></td></tr>';
+  $('#item_Table').append(html);
+ });
 
+$(document).on('click', '#remove', function(){
+  $(this).closest('tr').remove();
+ });
+
+ $('#insert_form').on('submit', function(event){
+  event.preventDefault();
+  var error = '';
+  $('#cboMedio').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Enter Item Name at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  
+  $('.serie').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Enter Item Quantity at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  
+  $('.descripcion').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+
+  $('.cboMarcaIng').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+
+  $('.cboModelo').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  $('.Tipo_Bien').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  $('.Color').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  $('.Año').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  $('.Placa').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  $('.stock_ingreso').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  $('.precio_compra').each(function(){
+   var count = 1;
+   if($(this).val() == '')
+   {
+    error += "<p>Select Unit at "+count+" Row</p>";
+    return false;
+   }
+   count = count + 1;
+  });
+  var form_data = $(this).serialize();
+  if(error == '')
+  {
+   $.ajax({
+    url:"ingreso-detalle.php",
+    method:"POST",
+    data:form_data,
+    success:function(data)
+    {
+     if(data == 'ok')
+     {
+      $('#item_table').find("tr:gt(0)").remove();
+      $('#error').html('<div class="alert alert-success">Item Details Saved</div>');
+     }
+    }
+   });
+  }
+  else
+  {
+   $('#error').html('<div class="alert alert-danger">'+error+'</div>');
+  }
+ });
+
+});
 </script>

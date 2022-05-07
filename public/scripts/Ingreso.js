@@ -101,7 +101,7 @@ function init() {
      
         var serie = document.getElementsByName("txtSeries");
         var desc = document.getElementsByName("txtDescripcion");
-    //    var marca = document.getElementsByName("cboMarca");
+    //  var marca = document.getElementsByName("cboMarca");
         var modelo = document.getElementsByName("txtModelo");
         var color = document.getElementsByName("txtColor");
         var stock_ing = document.getElementsByName("txtStockIng");
@@ -119,41 +119,7 @@ function init() {
 	function GuardarIngreso(e){
 		e.preventDefault();
 
-        if ($("#txtIdProveedor").val() != "") {
-            if ($("#cboTipoComprobanteIng").val() != "") {
-                if (elementos.length > 0) {
-                    Agregar();
-                    var detalle =  JSON.parse(consultarReg());
-
-                    var data = { 
-                        idUsuario : $("#txtIdUsuario").val(),
-                        idSucursal : $("#txtIdSucursal").val(),
-                        idproveedor : $("#txtIdProveedor").val(),
-                        tipo_comprobante : $("#cboTipoComprobanteIng").val(),
-                        serie_comprobante : $("#txtSerie").val(),
-                        num_comprobante : $("#txtNumero").val(),
-                        impuesto : $("#txtImpuesto").val(),
-                        total : $("#txtTotal").val(),
-                        detalle : detalle
-                    };
-                    
-                    $.post("./ajax/IngresoAjax.php?op=Save", data, function(r){
-                        swal("Mensaje del Sistema", r, "success");
-                        //alert(r);
-                        Limpiar();
-                        OcultarForm();
-                        ListadoIngresos();
-                    });
-                } else {
-                    bootbox.alert("Debe agregar articulos al detalle");
-                }
-            } else {
-                bootbox.alert("Debe seleccionar un tipo de comprobante");
-            }
-        } else {
-            bootbox.alert("Debe elegir un Proveedor");
-        }
-	}
+    }
 
     function Limpiar(){
         $("#txtIdSucursal").val(sessionStorage.idSucursal);
